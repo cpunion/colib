@@ -6,7 +6,7 @@ struct co_context {
 };
 
 enum {
-	MIN_STACK_SIZE = 4096
+    MIN_STACK_SIZE = 4096
 };
 
 static void
@@ -37,7 +37,7 @@ asm (
 "_co_transfer:\n"
 "co_transfer:\n"
 #if __amd64
-  	#define NUM_SAVED 6
+      #define NUM_SAVED 6
     "\tpush %rbp\n"
     "\tpush %rbx\n"
     "\tpush %r12\n"
@@ -65,7 +65,7 @@ asm (
     "\tpop  %ebx\n"
     "\tpop  %ebp\n"
 #else
-  	#error unsupported CPU
+      #error unsupported CPU
 #endif
     "\tret\n"
 );
@@ -73,15 +73,15 @@ asm (
 co_context_t
 co_create (co_func func, void *arg, void *stack, unsigned long ssize)
 {
-	if (!stack || ssize < sizeof(struct co_context))
-		return 0;
+    if (!stack || ssize < sizeof(struct co_context))
+        return 0;
 
     co_context_t ctx = (co_context_t)stack;
 
-	if (!func || ssize < MIN_STACK_SIZE) {
-		ctx->sp = 0;
-		return ctx;
-	}
+    if (!func || ssize < MIN_STACK_SIZE) {
+        ctx->sp = 0;
+        return ctx;
+    }
 
     stack += sizeof (struct co_context);
     ssize -= sizeof (struct co_context);
@@ -92,6 +92,6 @@ co_create (co_func func, void *arg, void *stack, unsigned long ssize)
     *(ctx->sp - 3) = (void*)func;
     *(ctx->sp - 4) = (void*)arg;
     ctx->sp -= NUM_SAVED;
-	return ctx;
+    return ctx;
 }
 
