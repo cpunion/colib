@@ -1,3 +1,5 @@
+cmake_minimum_required(VERSION 2.5)
+
 set(CMAKE_OSX_ARCHITECTURES x86_64;i386)
 
 add_definitions(
@@ -8,18 +10,8 @@ add_library(co
 	co.c
 )
 
+link_libraries(co)
 add_executable(cotest
-	co.c
 	cotest.c
-)
-
-add_executable(cotest1
-	co.c
-	cotest1.c
-)
-
-add_executable(cotest2
-	co.c
-	cotest2.c
 )
 

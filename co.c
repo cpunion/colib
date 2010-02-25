@@ -33,7 +33,9 @@ co_init (void)
 asm (
 ".text\n"
 ".globl _co_transfer\n"
+".globl co_transfer\n"
 "_co_transfer:\n"
+"co_transfer:\n"
 #if __amd64
   	#define NUM_SAVED 6
     "\tpush %rbp\n"
