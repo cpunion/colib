@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 struct co_context {
-  void **sp;
+    void **sp;
 };
 
 enum {
