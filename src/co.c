@@ -1,9 +1,7 @@
-#include "co.h"
+#include "colib/co.h"
+#include "cotype.h"
 #include <stdlib.h>
 
-struct co_context {
-    void **sp;
-};
 
 enum {
     MIN_STACK_SIZE = 4096
