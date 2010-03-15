@@ -3,15 +3,15 @@ cmake_minimum_required(VERSION 2.5)
 set(CMAKE_OSX_ARCHITECTURES x86_64;i386)
 
 add_definitions(
--g -O2
+    -g -O3
 )
 
+include_directories(include)
+
+set(LIBRARY_OUTPUT_PATH lib)
 add_library(co
-	co.c
+	src/co.c
+    src/sched.c
 )
 
-link_libraries(co)
-add_executable(cotest
-	cotest.c
-)
-
+subdirs(tests)

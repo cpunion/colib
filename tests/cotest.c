@@ -1,10 +1,10 @@
-#include "co.h"
+#include "colib/co.h"
 #include <stdlib.h>
 #include <stdio.h>
 
 enum { THREAD_COUNT = 32 };
 enum { STACK_SIZE = 4096 };
-co_context_t ctxs[THREAD_COUNT];
+struct co_context* ctxs[THREAD_COUNT];
 static int cur = 0;
 
 void test(void* p) {
@@ -19,13 +19,13 @@ void test(void* p) {
 
 int main() {
     char mainStack[64];
-    co_context_t mainCtx = co_create(0, 0, mainStack, sizeof(mainStack));
+    struct co_context* mainCtx = co_create(0, 0, mainStack, sizeof(mainStack));
 
     int i;
     for (i=0; i<THREAD_COUNT; i++) {
         char* stack = malloc(STACK_SIZE);
         printf("stack: %p\n", stack);
-        ctxs[i] = co_create(test, (void*)i, stack, STACK_SIZE);
+        ctxs[i] = co_create(test, (void*)(size_t)i, stack, STACK_SIZE);
         //printf("init coroutine: %d\n", i);
     }
     co_transfer(mainCtx, ctxs[0]);

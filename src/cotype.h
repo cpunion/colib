@@ -3,6 +3,9 @@
 
 struct co_context {
     void **sp;
+
+    struct co_context* prev;
+    struct co_context* next;
 };
 
 #endif // CO_TYPE_H_

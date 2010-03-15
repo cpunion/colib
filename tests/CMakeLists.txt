@@ -8,4 +8,10 @@ add_executable(cotest
 add_executable(cotest1
 	cotest1.c
 )
+add_executable(schedtest
+    schedtest.c
+)
+add_executable(schedbench
+    schedbench.c
+)
 

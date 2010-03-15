@@ -5,15 +5,20 @@
 extern "C" {
 #endif // __cplusplus
 
-typedef struct co_sched* co_sched_t;
+struct co_sched;
+struct co_context;
 
-co_sched_t co_sched_new();
+struct co_sched* co_sched_new();
 
-void co_sched_delete(co_sched_t sched);
+void co_sched_delete(struct co_sched* sched);
 
-void co_sched_append(co_context_t ctx);
+void co_sched_append(struct co_sched* sched, struct co_context* ctx);
 
-void co_sched_run(co_sched_t sched);
+void co_sched_run(struct co_sched* sched);
+
+void co_sched_yield(struct co_sched* sched);
+
+void co_sched_schedule(struct co_sched* sched);
 
 #ifdef __cplusplus
 } // extern "C"

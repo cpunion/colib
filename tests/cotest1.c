@@ -1,9 +1,9 @@
-#include "co.h"
+#include "colib/co.h"
 #include <stdlib.h>
 #include <stdio.h>
 
-co_context_t ctx1;
-co_context_t ctx2;
+struct co_context* ctx1;
+struct co_context* ctx2;
 
 void test1(void* p) {
     (void)p;
@@ -28,7 +28,7 @@ int main() {
     char mainStack[64];
     char stack1[STACK_SIZE];
     char stack2[STACK_SIZE];
-    co_context_t mainCtx = co_create(0, 0, mainStack, sizeof(mainStack));
+    struct co_context* mainCtx = co_create(0, 0, mainStack, sizeof(mainStack));
     ctx1 = co_create(test1, (void*)0, stack1, STACK_SIZE);
     ctx2 = co_create(test2, (void*)0, stack2, STACK_SIZE);
 
