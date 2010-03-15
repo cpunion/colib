@@ -17,4 +17,7 @@ add_executable(schedbench
 add_executable(schedspawn
     schedspawn.c
 )
+add_executable(schedlargebench
+    schedlargebench.c
+)
 
