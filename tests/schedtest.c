@@ -6,7 +6,7 @@ struct co_sched* g_sched;
 
 void test2(void* p)
 {
-    while (1) {
+    while(1) {
         printf("test2\n");
         co_sched_schedule(g_sched);
     }

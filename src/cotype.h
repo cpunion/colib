@@ -6,6 +6,7 @@ struct co_context {
 
     struct co_context* prev;
     struct co_context* next;
+    unsigned long flags;
 };
 
 #endif // CO_TYPE_H_

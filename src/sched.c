@@ -46,9 +46,15 @@ void co_sched_append(struct co_sched* sched, struct co_context* ctx)
 
 struct spawn_arg
 {
+    struct co_sched* sched;
     co_proc proc;
     void* arg;
     size_t need_free;
+};
+
+enum {
+    F_NEED_FREE = 1,
+    F_NEED_EXIT = 2,
 };
 
 static
@@ -56,12 +62,15 @@ void co_sched_warp(void* p)
 {
     struct spawn_arg* sarg = (struct spawn_arg*)p;
     (*sarg->proc)(sarg->arg);
+    sarg->sched->current->flags |= F_NEED_EXIT;
     if (sarg->need_free) {
-        free(sarg);
+        sarg->sched->current->flags |= F_NEED_FREE;
     }
+    co_sched_schedule(sarg->sched);
 }
 
 enum { DEFAULT_STACK_SIZE = 4096 };
+
 
 void co_sched_spawn(struct co_sched* sched, co_proc proc, void* arg,
         void* stack, unsigned long stackSize)
@@ -76,12 +85,14 @@ void co_sched_spawn(struct co_sched* sched, co_proc proc, void* arg,
     else {
         sarg->need_free = 0;
     }
+    sarg->sched = sched;
     sarg->proc = proc;
     sarg->arg = arg;
 
     stack = (char*)stack + sizeof(struct spawn_arg);
     stackSize -= sizeof(struct spawn_arg);
     struct co_context* ctx = co_create(co_sched_warp, sarg, stack, stackSize);
+    ctx->flags = 0;
 
     co_sched_append(sched, ctx);
 }
@@ -91,21 +102,35 @@ static
 void co_sched_run_next_(struct co_sched* sched)
 {
     struct run_queue* rq = &sched->run_queue;
-    struct co_context* ctx = rq->head;
-    if (ctx->next) {
-        ctx->next->prev = 0;
-    }
-    rq->head = ctx->next;
-    if (!rq->head) {
-        rq->tail = 0;
-    }
-    ctx->next = 0;
-    ctx->prev = 0;
+    while (rq->head) {
+        struct co_context* ctx = rq->head;
+        if (ctx->next) {
+            ctx->next->prev = 0;
+        }
+        rq->head = ctx->next;
+        if (!rq->head) {
+            rq->tail = 0;
+        }
+        ctx->next = 0;
+        ctx->prev = 0;
 
-    struct co_context* current = sched->current;
-    sched->current = ctx;
-    co_transfer(current, ctx);
-    sched->current = current;
+        if (ctx->flags & F_NEED_EXIT) {
+            if (ctx->flags & F_NEED_FREE) {
+                // printf("free fiber\n");
+                free(ctx->sp);
+            }
+            // printf("exit fiber\n");
+            continue;
+        }
+        // printf("run fiber\n");
+
+        struct co_context* current = sched->current;
+        sched->current = ctx;
+        co_transfer(current, ctx);
+        sched->current = current;
+        return;
+    }
+    co_transfer(sched->current, sched->main);
 }
 
 void co_sched_run(struct co_sched* sched)
@@ -117,8 +142,10 @@ void co_sched_run(struct co_sched* sched)
     struct run_queue* rq = &sched->run_queue;
 
     while(rq->head) {
+        // printf("run next\n");
         co_sched_run_next_(sched);
     }
+    // printf("run exit\n");
 }
 
 void co_sched_yield(struct co_sched* sched)
