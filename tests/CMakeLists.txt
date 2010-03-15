@@ -14,4 +14,7 @@ add_executable(schedtest
 add_executable(schedbench
     schedbench.c
 )
+add_executable(schedspawn
+    schedspawn.c
+)
 

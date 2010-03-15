@@ -4,7 +4,7 @@
 
 
 enum {
-    MIN_STACK_SIZE = 4096
+    MIN_STACK_SIZE = 512
 };
 
 static void

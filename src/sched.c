@@ -44,6 +44,49 @@ void co_sched_append(struct co_sched* sched, struct co_context* ctx)
     ctx->next = 0;
 }
 
+struct spawn_arg
+{
+    co_proc proc;
+    void* arg;
+    size_t need_free;
+};
+
+static
+void co_sched_warp(void* p)
+{
+    struct spawn_arg* sarg = (struct spawn_arg*)p;
+    (*sarg->proc)(sarg->arg);
+    if (sarg->need_free) {
+        free(sarg);
+    }
+}
+
+enum { DEFAULT_STACK_SIZE = 4096 };
+
+void co_sched_spawn(struct co_sched* sched, co_proc proc, void* arg,
+        void* stack, unsigned long stackSize)
+{
+    struct spawn_arg* sarg = (struct spawn_arg*)stack;
+    if (!stack) {
+        stackSize = stackSize > DEFAULT_STACK_SIZE ? stackSize : DEFAULT_STACK_SIZE;
+        stack = (void*)malloc(stackSize);
+        sarg = (struct spawn_arg*)stack;
+        sarg->need_free = 1;
+    }
+    else {
+        sarg->need_free = 0;
+    }
+    sarg->proc = proc;
+    sarg->arg = arg;
+
+    stack = (char*)stack + sizeof(struct spawn_arg);
+    stackSize -= sizeof(struct spawn_arg);
+    struct co_context* ctx = co_create(co_sched_warp, sarg, stack, stackSize);
+
+    co_sched_append(sched, ctx);
+}
+
+
 static
 void co_sched_run_next_(struct co_sched* sched)
 {

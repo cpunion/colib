@@ -8,9 +8,14 @@ extern "C" {
 struct co_sched;
 struct co_context;
 
+typedef void(*co_proc)(void*);
+
 struct co_sched* co_sched_new();
 
 void co_sched_delete(struct co_sched* sched);
+
+void co_sched_spawn(struct co_sched* sched, co_proc proc, void* arg,
+        void* stack, unsigned long stackSize);
 
 void co_sched_append(struct co_sched* sched, struct co_context* ctx);
 
