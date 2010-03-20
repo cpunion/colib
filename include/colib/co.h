@@ -1,24 +1,29 @@
-#ifndef CO_H_
-#define CO_H_
+#ifndef COLIB_CO_H_
+#define COLIB_CO_H_
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif /* __cplusplus */
+
+typedef struct co_context* co_context_t;
 
 typedef void (*co_func)(void *);
 
-struct co_context;
 
-struct co_context*
+co_context_t
 co_create (co_func func, void *arg, void *stack, unsigned long ssize);
 
 void
+co_delete(co_context_t ctx);
+
+void
 __attribute__ ((__noinline__, __regparm__(2)))
-co_transfer (struct co_context* from, struct co_context* to);
+co_transfer (co_context_t from, co_context_t to);
+
 
 #ifdef __cplusplus
-} // extern "C"
-#endif // __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */
 
-#endif // CO_H_
+#endif /* COLIB_CO_H_ */
 

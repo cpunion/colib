@@ -1,5 +1,9 @@
-#ifndef CO_TYPE_H_
-#define CO_TYPE_H_
+#ifndef COLIB_TYPE_H_
+#define COLIB_TYPE_H_
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
 
 struct co_context {
     void **sp;
@@ -9,5 +13,9 @@ struct co_context {
     unsigned long flags;
 };
 
-#endif // CO_TYPE_H_
+#ifdef __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */
+
+#endif /* COLIB_TYPE_H_ */
 

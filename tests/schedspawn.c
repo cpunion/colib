@@ -33,11 +33,11 @@ void test3(void* p)
 }
 int main()
 {
-    g_sched = co_sched_new();
+    g_sched = co_sched_new(0);
 
-    char stack1[4096+24];
-    char stack2[4096+24];
-    char stack3[4096+24];
+    char stack1[4096];
+    char stack2[4096];
+    char stack3[4096];
     co_sched_spawn(g_sched, test1, (void*)0, stack1, sizeof(stack1));
     co_sched_spawn(g_sched, test2, (void*)0, stack2, sizeof(stack2));
     co_sched_spawn(g_sched, test3, (void*)0, stack3, sizeof(stack3));

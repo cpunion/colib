@@ -68,13 +68,13 @@ asm (
     "\tret\n"
 );
 
-struct co_context*
+co_context_t
 co_create (co_func func, void *arg, void *stack, unsigned long ssize)
 {
     if (!stack || ssize < sizeof(struct co_context))
         return 0;
 
-    struct co_context* ctx = (struct co_context*)stack;
+    co_context_t ctx = (co_context_t)stack;
 
     if (!func || ssize < MIN_STACK_SIZE) {
         ctx->sp = 0;
@@ -94,5 +94,9 @@ co_create (co_func func, void *arg, void *stack, unsigned long ssize)
     ctx->next = 0;
     ctx->prev = 0;
     return ctx;
+}
+
+void co_delete(co_context_t ctx)
+{
 }
 

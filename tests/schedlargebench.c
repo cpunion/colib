@@ -20,14 +20,14 @@ void test(void* p)
 
 int main()
 {
-    g_sched = co_sched_new();
+    g_sched = co_sched_new(0);
 
     enum { THREAD_COUNT = 1000 };
     enum { STACK_SIZE = 2048 };
     char* stack = malloc(THREAD_COUNT * STACK_SIZE);
     int i;
     for (i = 0; i < THREAD_COUNT; i ++) {
-        co_sched_append(g_sched, co_create(test, (void*)0, stack + i * STACK_SIZE, STACK_SIZE));
+        co_sched_spawn(g_sched, test, (void*)0, stack + i * STACK_SIZE, STACK_SIZE);
     }
 
     co_sched_run(g_sched);

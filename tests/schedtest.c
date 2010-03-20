@@ -20,15 +20,13 @@ void test1(void* p)
 }
 int main()
 {
-    g_sched = co_sched_new();
+    g_sched = co_sched_new(0);
 
     char stack1[4096];
-    struct co_context* ctx1 = co_create(test1, (void*)0, stack1, sizeof(stack1));
     char stack2[4096];
-    struct co_context* ctx2 = co_create(test2, (void*)0, stack2, sizeof(stack2));
 
-    co_sched_append(g_sched, ctx1);
-    co_sched_append(g_sched, ctx2);
+    co_sched_spawn(g_sched, test1, (void*)0, stack1, sizeof(stack1));
+    co_sched_spawn(g_sched, test2, (void*)0, stack2, sizeof(stack2));
 
     co_sched_run(g_sched);
 

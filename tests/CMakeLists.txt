@@ -20,4 +20,3 @@ add_executable(schedspawn
 add_executable(schedlargebench
     schedlargebench.c
 )
-

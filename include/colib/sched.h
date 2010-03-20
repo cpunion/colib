@@ -1,33 +1,32 @@
-#ifndef CO_SCHED_H_
-#define CO_SCHED_H_
+#ifndef COLIB_SCHED_H_
+#define COLIB_SCHED_H_
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif /* __cplusplus */
 
-struct co_sched;
-struct co_context;
+struct co_alloc;
+
+typedef struct co_sched* co_sched_t;
 
 typedef void(*co_proc)(void*);
 
-struct co_sched* co_sched_new();
+co_sched_t co_sched_new(struct co_alloc* alloc);
 
-void co_sched_delete(struct co_sched* sched);
+void co_sched_delete(co_sched_t sched);
 
-void co_sched_spawn(struct co_sched* sched, co_proc proc, void* arg,
+void co_sched_spawn(co_sched_t sched, co_proc proc, void* arg,
         void* stack, unsigned long stackSize);
 
-void co_sched_append(struct co_sched* sched, struct co_context* ctx);
+void co_sched_run(co_sched_t sched);
 
-void co_sched_run(struct co_sched* sched);
+void co_sched_yield(co_sched_t sched);
 
-void co_sched_yield(struct co_sched* sched);
-
-void co_sched_schedule(struct co_sched* sched);
+void co_sched_schedule(co_sched_t sched);
 
 #ifdef __cplusplus
-} // extern "C"
-#endif // __cplusplus
+} /* extern "C" */
+#endif /* __cplusplus */
 
-#endif // CO_SCHED_H_
+#endif /* COLIB_SCHED_H_ */
 
