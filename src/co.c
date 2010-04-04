@@ -69,7 +69,7 @@ asm (
 );
 
 co_context_t
-co_create (co_func func, void *arg, void *stack, unsigned long ssize)
+co_create (co_func func, void *arg, void *stack, size_t ssize)
 {
     if (!stack || ssize < sizeof(struct co_context))
         return 0;

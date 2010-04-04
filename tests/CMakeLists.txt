@@ -20,3 +20,7 @@ add_executable(schedspawn
 add_executable(schedlargebench
     schedlargebench.c
 )
+add_executable(asynctest
+	asynctest.cpp
+)
+

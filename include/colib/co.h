@@ -1,6 +1,8 @@
 #ifndef COLIB_CO_H_
 #define COLIB_CO_H_
 
+#include <stdlib.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
@@ -11,7 +13,7 @@ typedef void (*co_func)(void *);
 
 
 co_context_t
-co_create (co_func func, void *arg, void *stack, unsigned long ssize);
+co_create (co_func func, void *arg, void *stack, size_t ssize);
 
 void
 co_delete(co_context_t ctx);

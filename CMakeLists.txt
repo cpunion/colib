@@ -12,6 +12,7 @@ set(LIBRARY_OUTPUT_PATH lib)
 add_library(co
 	src/co.c
     src/sched.c
+    src/iosched.c
 )
 
 subdirs(tests)

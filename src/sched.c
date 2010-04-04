@@ -12,13 +12,13 @@ struct run_queue {
 
 struct co_sched
 {
-    struct co_alloc* alloc;
+    co_alloc_t alloc;
     struct run_queue run_queue;
     co_context_t current;
     co_context_t main;
 };
 
-struct co_sched* co_sched_new(struct co_alloc* alloc)
+struct co_sched* co_sched_new(co_alloc_t alloc)
 {
     if (!alloc) {
         alloc = default_alloc();
@@ -80,7 +80,7 @@ enum { DEFAULT_STACK_SIZE = 4096 };
 
 
 void co_sched_spawn(struct co_sched* sched, co_proc proc, void* arg,
-        void* stack, unsigned long stackSize)
+        void* stack, size_t stackSize)
 {
     struct spawn_arg* sarg = (struct spawn_arg*)stack;
     if (!stack) {
